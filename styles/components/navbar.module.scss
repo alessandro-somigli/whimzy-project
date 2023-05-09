@@ -1,0 +1,49 @@
+.navbar {
+  top: 0;
+
+  background: #282A36;
+
+  display: flex;
+  align-items: center;
+
+  padding: .5rem .75rem;
+
+  /* From https://css.glass */
+  box-shadow: 0 .25rem 2rem #0000002f;
+  backdrop-filter: blur(.30rem);
+  -webkit-backdrop-filter: blur(.30rem);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+
+  cursor: pointer;
+
+  user-select: none;
+
+  .logo_text {
+    font-size: 1.25rem;
+    font-weight: bold;
+
+    position: relative;
+    top: -.10rem;
+    
+    margin-left: .5rem;
+
+    line-height: .9rem;
+
+    :last-child {
+      text-decoration: underline;
+      text-decoration-color: #FEE45A;
+      text-decoration-thickness: .25rem;
+      text-decoration-skip: 4px;
+      text-underline-offset: .33rem;
+      
+    }
+  }
+}
+
+.user {
+  margin-left: auto;
+}
