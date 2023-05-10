@@ -19,6 +19,22 @@ export default function Navbar() {
         </span>
       </div>
 
+      <div className={style.links}>
+        <span className={`${style.hover_effect} ${style.tag}`}>&nbsp;feed</span>
+        <span className={`${style.hover_effect} ${style.tag}`}>&nbsp;friends</span>
+        <span className={`${style.hover_effect} ${style.tag}`}>&nbsp;me</span>
+      </div>
+
+      <div className={style.dropdown}>
+        <input id="textinput" type="checkbox" name="menu" className={style.dropdown_input} />
+        <label htmlFor="textinput" className={`${style.tag} ${style.dropdown_label} ${style.hover_effect}`}>&nbsp;Menu</label>
+        <div className={style.menu}>
+          <span className={`${style.hover_effect} ${style.tag}`}>&nbsp;feed</span>
+          <span className={`${style.hover_effect} ${style.tag}`}>&nbsp;friends</span>
+          <span className={`${style.hover_effect} ${style.tag}`}>&nbsp;me</span>
+        </div>
+      </div>
+
       <div className={style.user}>
         <UserButton />
       </div>

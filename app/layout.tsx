@@ -1,5 +1,6 @@
 import '@/styles/globals.scss'
-import { Inter, Courier_Prime } from 'next/font/google'
+
+import { Courier_Prime } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
 import Navbar from '@/components/navbar'
 
