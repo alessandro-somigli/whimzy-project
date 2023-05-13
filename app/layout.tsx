@@ -5,7 +5,7 @@ import { ClerkProvider } from '@clerk/nextjs'
 import Navbar from '@/components/navbar'
 
 const courier = Courier_Prime({ 
-  weight: ["400", "700"],
+  weight: "400",
   subsets: ['latin'] 
 })
 

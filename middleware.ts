@@ -6,7 +6,10 @@ const beforeClerkAuth = (request: NextRequest, event: NextFetchEvent): NextRespo
 const afterClerkAuth = (auth: AuthObject, request: NextRequest, event: NextFetchEvent): NextResponse | undefined  => undefined
 
 const clerkPublicRoutes = [
-  '/auth'
+  '/',
+  '/auth',
+  '/feed',
+  '/api(.*)',
 ]
 
 const clerkIgnoreRoutes = undefined
