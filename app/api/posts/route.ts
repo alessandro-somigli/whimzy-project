@@ -14,7 +14,20 @@ export type getPostsRow = postRow & contributionRow
 export type getPostsResponse = Array<getPostsRow>
 
 export async function POST(request: NextRequest, response: NextResponse) {
-  const body = await request.json() as { discriminant: number[] };
+  const filter = (await request.json()).filter as { 
+    users?: number[],
+    posts?: number[] 
+  };
+
+  const usersFilter = filter.users? 
+    ` AND Posts.post_user IN (
+    ${filter.users.length? 
+      `${filter.users.map(u => `"${u}"`)}) `:
+      "NULL" }) ` : "";
+  
+  const postsFilter = filter.posts?.length? 
+    ` AND Posts.post_id NOT IN (${filter.posts}) ` : "";
+
   const planetscale = connect(config);
 
   // select 20 new posts and all its contributions
@@ -22,7 +35,8 @@ export async function POST(request: NextRequest, response: NextResponse) {
   SELECT * FROM (
     SELECT DISTINCT * FROM Posts
     WHERE Posts.post_publish_date > (NOW() - INTERVAL 1 DAY)
-    ${body.discriminant.length? ` AND Posts.post_id NOT IN (${body.discriminant}) ` : ""}
+    ${usersFilter}
+    ${postsFilter}
     ORDER BY RAND() LIMIT 20
   ) AS Posts
   LEFT JOIN Contributions ON Posts.post_id = Contributions.cont_post

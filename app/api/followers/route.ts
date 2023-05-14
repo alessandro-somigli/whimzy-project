@@ -1,0 +1,27 @@
+import { followRow } from "@/database/schema";
+import { connect } from "@planetscale/database";
+import { NextRequest, NextResponse } from "next/server";
+
+export const runtime = "edge";
+
+const config = {
+  host: process.env.DATABASE_HOST,
+  username: process.env.DATABASE_USERNAME,
+  password: process.env.DATABASE_PASSWORD,
+};
+
+export type getFollowersRow = followRow;
+export type getFollowersResponse = Array<getFollowersRow>;
+
+export async function POST(request: NextRequest, response: NextResponse) {
+  const filter = (await request.json()).filter as { followed: string };
+  
+  const planetscale = connect(config);
+
+  const followers = (await planetscale.execute(`
+  SELECT * FROM Follow
+  WHERE Follow.followed = ${filter.followed};
+  `)).rows as getFollowersResponse
+
+  return NextResponse.json(followers);
+}

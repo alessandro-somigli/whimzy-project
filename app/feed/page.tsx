@@ -2,8 +2,10 @@ import style from "@/styles/pages/feed.module.scss"
 import Scroll from "@/components/scroll";
 import { auth } from "@clerk/nextjs";
 
+export const runtime = "edge";
+
 export default async function Page() {
-  const { user, userId } = auth();
+  const { userId } = auth();
 
   return (
     <main className={style.feed}>

@@ -3,14 +3,14 @@
 import { getPostsResponse } from "@/app/api/posts/route";
 import { post } from "@/database/schema";
 import { useEffect, useState } from "react";
-import Post from "./post";
+import Post from "@/components/post";
 
-const getPosts = async (endpoint: string, discriminant: number[]) => {
-  const response = await fetch(endpoint, {
-    body: JSON.stringify({ discriminant: discriminant }),
+const getPosts = async (filter: { posts: number[], users?: string[] }) => {
+  const response = await fetch("/api/posts", {
+    body: JSON.stringify({ filter }),
     method: 'POST'
   });
-  const json = await response.json();
+  const json = await response.json() as getPostsResponse;
   return parseResponse(json);
 }
 
@@ -39,15 +39,23 @@ const parseResponse = (response: getPostsResponse): Array<post> => {
   return posts;
 };
 
-export default function Scroll() {
+type ScrollProps = {
+  users?: string[]
+}
+
+export default function Scroll(props: ScrollProps) {
   const [posts, setPosts] = useState([] as Array<post>);
+  const [empty, setEmpty] = useState(false)
 
   const scroll = () => {
     const postsId = posts.map(post => post.post_id);
 
-    getPosts("/api/posts", postsId).then(posts => {
+    getPosts({
+      posts: postsId, 
+      users: props.users
+    }).then(posts => {
       if (posts.length) setPosts(prev => [...prev, ...posts]); 
-      else console.log("empty")
+      else setEmpty(true);
     });
   }
 
@@ -59,6 +67,8 @@ export default function Scroll() {
         <Post key={post.post_id} 
           post={post} onIntersect={() => scroll()}
           last={index === posts.length - 1} />)}
+
+      {empty? <span>no more posts to view!</span>:null}
     </div>
   );
 }

@@ -1,7 +1,8 @@
 import Image from "next/image"
 
 import style from "@/styles/components/navbar.module.scss"
-import { UserButton } from "@clerk/nextjs"
+import { SignedOut, UserButton } from "@clerk/nextjs"
+import { SignInButton } from "@clerk/nextjs";
 
 export default function Navbar() {
 
@@ -37,6 +38,10 @@ export default function Navbar() {
 
       <div className={style.user}>
         <UserButton />
+
+        <SignedOut>
+          <SignInButton><button className={style.signin_button}></button></SignInButton>
+        </SignedOut>
       </div>
     </nav>
   )
