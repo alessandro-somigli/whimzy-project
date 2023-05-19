@@ -27,7 +27,7 @@ export default async function Page() {
   const { userId } = auth();
 
   const friends = userId? await getFriends(userId) : []
-  
+
   return (
     <main className={style.feed}>
       <Scroll users={friends} />

@@ -1,39 +1,20 @@
-"use client";
-
 import { post } from "@/database/schema";
-import { useEffect, useRef } from "react";
+import style from "@/styles/components/post.module.scss";
 
 type PostProps = {
-  post: post,
-  last: boolean,
-  onIntersect: () => void
+  post: post
 }
-
-export default function Post(props: PostProps) {
-  const postRef = useRef(null)
-
-  useEffect(() => {
-    if (!postRef?.current) return;
   
-    const observer = new IntersectionObserver(([entry]) => {
-      if (props.last && entry.isIntersecting) {
-        props.onIntersect();
-        observer.unobserve(entry.target);
-      }
-    });
-  
-    observer.observe(postRef.current);
-  }, [props]);
-  
+export default function ScrollPost(props: PostProps) {
 
   return (
-    <div ref={postRef}>
-      <span>{props.post.post_title}</span>  <br />
-      <span>by: {props.post.post_user}</span>  <br />
+    <div className={style.post}>
+      <span className={style.title}>{props.post.post_title}</span>
+      <span className={style.author}>@{props.post.post_user}</span> <br />
 
       <span>{props.post.post_text}</span>
-      {props.post.contributions.map(conttribution => 
-        <span key={conttribution.cont_user}> {conttribution.cont_text}</span>)}
+      {props.post.contributions.map(contribution => 
+        <span key={contribution.cont_user}> {contribution.cont_text}</span>)}
     </div>
   );
 }

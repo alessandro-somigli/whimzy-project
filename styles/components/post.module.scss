@@ -1,0 +1,20 @@
+.post {
+  width: calc(50% + 6rem);
+
+  padding: 1.25rem;
+  margin: 0.5rem 0;
+
+  border-radius: 0.5rem;
+
+  background-color: #4c4f64;
+
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.title {
+  font-size: 1.75rem;
+}
+.author {
+  font-size: .75rem;
+  color: #BDBDBD;
+}

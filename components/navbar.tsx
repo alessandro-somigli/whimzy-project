@@ -1,10 +1,11 @@
 import Image from "next/image"
 
 import style from "@/styles/components/navbar.module.scss"
-import { SignedOut, UserButton } from "@clerk/nextjs"
+import { SignedOut, UserButton, auth } from "@clerk/nextjs"
 import { SignInButton } from "@clerk/nextjs";
 
 export default function Navbar() {
+  const { userId } = auth();
 
   return (
     <nav className={style.navbar}>

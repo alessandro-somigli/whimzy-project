@@ -3,7 +3,8 @@
 import { getPostsResponse } from "@/app/api/posts/route";
 import { post } from "@/database/schema";
 import { useEffect, useState } from "react";
-import Post from "@/components/post";
+import ScrollPost from "@/components/scrollPost";
+import style from "@/styles/components/scroll.module.scss";
 
 const getPosts = async (filter: { posts: number[], users?: string[] }) => {
   const response = await fetch("/api/posts", {
@@ -45,7 +46,7 @@ type ScrollProps = {
 
 export default function Scroll(props: ScrollProps) {
   const [posts, setPosts] = useState([] as Array<post>);
-  const [empty, setEmpty] = useState(false)
+  const [empty, setEmpty] = useState(false);
 
   const scroll = () => {
     const postsId = posts.map(post => post.post_id);
@@ -62,13 +63,13 @@ export default function Scroll(props: ScrollProps) {
   useEffect(() => scroll(), []);
 
   return (
-    <div>
+    <section className={style.scroll}>
       {posts.map((post, index) =>
-        <Post key={post.post_id} 
+        <ScrollPost key={post.post_id} 
           post={post} onIntersect={() => scroll()}
           last={index === posts.length - 1} />)}
 
       {empty? <span>no more posts to view!</span>:null}
-    </div>
+    </section>
   );
 }

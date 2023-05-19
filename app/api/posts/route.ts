@@ -13,7 +13,7 @@ const config = {
 export type getPostsRow = postRow & contributionRow
 export type getPostsResponse = Array<getPostsRow>
 
-export async function POST(request: NextRequest, response: NextResponse) {
+export async function POST(request: NextRequest, context: { params: {} }) {
   const filter = (await request.json()).filter as { 
     users?: number[],
     posts?: number[] 

@@ -13,7 +13,7 @@ const config = {
 export type getFollowersRow = followRow;
 export type getFollowersResponse = Array<getFollowersRow>;
 
-export async function POST(request: NextRequest, response: NextResponse) {
+export async function POST(request: NextRequest, context: { params: {} }) {
   const filter = (await request.json()).filter as { followed: string };
   
   const planetscale = connect(config);
