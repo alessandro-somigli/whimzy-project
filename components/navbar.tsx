@@ -24,7 +24,7 @@ export default function Navbar() {
       <div className={style.links}>
         <span className={`${style.hover_effect} ${style.tag}`}>&nbsp;feed</span>
         <span className={`${style.hover_effect} ${style.tag}`}>&nbsp;friends</span>
-        <span className={`${style.hover_effect} ${style.tag}`}>&nbsp;me</span>
+        {userId? <span className={`${style.hover_effect} ${style.tag}`}>&nbsp;me</span> : <></>}
       </div>
 
       <div className={style.dropdown}>
@@ -33,7 +33,7 @@ export default function Navbar() {
         <div className={style.menu}>
           <span className={`${style.hover_effect} ${style.tag}`}>&nbsp;feed</span>
           <span className={`${style.hover_effect} ${style.tag}`}>&nbsp;friends</span>
-          <span className={`${style.hover_effect} ${style.tag}`}>&nbsp;me</span>
+          {userId? <span className={`${style.hover_effect} ${style.tag}`}>&nbsp;me</span> : <></>}
         </div>
       </div>
 
@@ -41,7 +41,7 @@ export default function Navbar() {
         <UserButton />
 
         <SignedOut>
-          <SignInButton><button className={style.signin_button}></button></SignInButton>
+          <SignInButton><button className={style.signin_button}>sign in</button></SignInButton>
         </SignedOut>
       </div>
     </nav>

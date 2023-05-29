@@ -9,8 +9,8 @@ export default function ScrollPost(props: PostProps) {
 
   return (
     <div className={style.post}>
-      <span className={style.title}>{props.post.post_title}</span>
       <span className={style.author}>@{props.post.post_user}</span> <br />
+      <span className={style.title}>{props.post.post_title}</span> <br />
 
       <span>{props.post.post_text}</span>
       {props.post.contributions.map(contribution => 

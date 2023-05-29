@@ -5,6 +5,7 @@ import { post } from "@/database/schema";
 import { useEffect, useState } from "react";
 import ScrollPost from "@/components/scrollPost";
 import style from "@/styles/components/scroll.module.scss";
+import Spinner from "@/components/spinner";
 
 const getPosts = async (filter: { posts: number[], users?: string[] }) => {
   const response = await fetch("/api/posts", {
@@ -45,6 +46,7 @@ type ScrollProps = {
 }
 
 export default function Scroll(props: ScrollProps) {
+  const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([] as Array<post>);
   const [empty, setEmpty] = useState(false);
 
@@ -55,6 +57,8 @@ export default function Scroll(props: ScrollProps) {
       posts: postsId, 
       users: props.users
     }).then(posts => {
+      setLoading(false);
+
       if (posts.length) setPosts(prev => [...prev, ...posts]); 
       else setEmpty(true);
     });
@@ -64,8 +68,9 @@ export default function Scroll(props: ScrollProps) {
 
   return (
     <section className={style.scroll}>
-      {posts.map((post, index) =>
-        <ScrollPost key={post.post_id} 
+      {loading? <Spinner /> : 
+      posts.map((post, index) =>
+        <ScrollPost key={post.post_id}
           post={post} onIntersect={() => scroll()}
           last={index === posts.length - 1} />)}
 

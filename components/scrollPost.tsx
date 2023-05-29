@@ -3,6 +3,7 @@
 import { post } from "@/database/schema";
 import { useEffect, useRef } from "react";
 import Post from "@/components/post";
+import { useRouter } from "next/navigation";
 
 type ScrollPostProps = {
   post: post,
@@ -11,7 +12,8 @@ type ScrollPostProps = {
 }
 
 export default function ScrollPost(props: ScrollPostProps) {
-  const postRef = useRef(null)
+  const postRef = useRef(null);
+  const router = useRouter();
 
   useEffect(() => {
     if (!postRef?.current) return;
@@ -25,10 +27,9 @@ export default function ScrollPost(props: ScrollPostProps) {
   
     observer.observe(postRef.current);
   }, [props]);
-  
 
   return (
-    <div ref={postRef}>
+    <div ref={postRef} onClick={() => router.push(`/posts/${props.post.post_id}`)}>
       <Post post={props.post} />
     </div>
   );

@@ -37,7 +37,7 @@ export async function GET(request: NextRequest, context: { params: { id: number 
 
   const response = (await planetscale.execute(`
   SELECT * FROM Posts 
-  INNER JOIN Contributions ON Posts.post_id = Contributions.cont_post
+  LEFT JOIN Contributions ON Posts.post_id = Contributions.cont_post
   WHERE Posts.post_id = ${context.params.id};
   `)).rows as getPostsResponse;
 
