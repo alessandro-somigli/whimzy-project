@@ -29,8 +29,10 @@ export default function ScrollPost(props: ScrollPostProps) {
   }, [props]);
 
   return (
-    <div ref={postRef} onClick={() => router.push(`/posts/${props.post.post_id}`)}>
-      <Post post={props.post} />
+    <div ref={postRef}>
+      <div onClick={() => router.push(`/posts/${props.post.post_id}`)}>
+        <Post post={props.post} />
+      </div>
     </div>
   );
 }

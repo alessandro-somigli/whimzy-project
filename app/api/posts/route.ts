@@ -15,28 +15,40 @@ export type getPostsResponse = Array<getPostsRow>
 
 export async function POST(request: NextRequest, context: { params: {} }) {
   const filter = (await request.json()).filter as { 
-    users?: number[],
-    posts?: number[] 
+    users?: string[],
+    posts?: number[],
+    date?: number
   };
 
+  const dateFilter = filter.date !== -1? 
+    ` Posts.post_publish_date > (NOW() - INTERVAL ${filter.date? filter.date : 1} DAY) ` : "";
+
   const usersFilter = filter.users? 
-    ` AND Posts.post_user IN (
+    ` ${dateFilter? "AND" : ""} Posts.post_user IN (
     ${filter.users.length? 
-      `${filter.users.map(u => `"${u}"`)}) `:
+      `${filter.users.map(u => `"${u}"`)} `:
       "NULL" }) ` : "";
   
   const postsFilter = filter.posts?.length? 
-    ` AND Posts.post_id NOT IN (${filter.posts}) ` : "";
+    ` ${usersFilter || dateFilter? "AND" : ""} Posts.post_id NOT IN (${filter.posts}) ` : "";
 
   const planetscale = connect(config);
+
+  console.log(`
+  SELECT * FROM (
+    SELECT DISTINCT * FROM Posts WHERE 
+    ${dateFilter} ${usersFilter} ${postsFilter}
+    ORDER BY RAND() LIMIT 20
+  ) AS Posts
+  LEFT JOIN Contributions ON Posts.post_id = Contributions.cont_post
+  ORDER BY Posts.post_publish_date, Contributions.cont_publish_date;  
+  `)
 
   // select 20 new posts and all its contributions
   const posts = (await planetscale.execute(`
   SELECT * FROM (
-    SELECT DISTINCT * FROM Posts
-    WHERE Posts.post_publish_date > (NOW() - INTERVAL 1 DAY)
-    ${usersFilter}
-    ${postsFilter}
+    SELECT DISTINCT * FROM Posts ${dateFilter||postsFilter||usersFilter? "WHERE" : ""}
+    ${dateFilter} ${usersFilter} ${postsFilter}
     ORDER BY RAND() LIMIT 20
   ) AS Posts
   LEFT JOIN Contributions ON Posts.post_id = Contributions.cont_post

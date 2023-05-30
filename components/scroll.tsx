@@ -7,7 +7,7 @@ import ScrollPost from "@/components/scrollPost";
 import style from "@/styles/components/scroll.module.scss";
 import Spinner from "@/components/spinner";
 
-const getPosts = async (filter: { posts: number[], users?: string[] }) => {
+const getPosts = async (filter: { posts: number[], users?: string[], date: number|undefined }) => {
   const response = await fetch("/api/posts", {
     body: JSON.stringify({ filter }),
     method: 'POST'
@@ -42,7 +42,8 @@ const parseResponse = (response: getPostsResponse): Array<post> => {
 };
 
 type ScrollProps = {
-  users?: string[]
+  users?: string[],
+  date?: boolean
 }
 
 export default function Scroll(props: ScrollProps) {
@@ -55,11 +56,12 @@ export default function Scroll(props: ScrollProps) {
 
     getPosts({
       posts: postsId, 
-      users: props.users
+      users: props.users,
+      date: props.date? undefined : -1
     }).then(posts => {
       setLoading(false);
 
-      if (posts.length) setPosts(prev => [...prev, ...posts]); 
+      if (posts.length) setPosts(prev => [...prev, ...posts]);
       else setEmpty(true);
     });
   }
