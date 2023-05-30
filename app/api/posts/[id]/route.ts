@@ -4,6 +4,8 @@ import { getPostsResponse } from "@/app/api/posts/route";
 import { contributionRow } from "@/database/schema";
 import { post } from "@/database/schema";
 
+export const runtime = "edge";
+
 const config = {
   host: process.env.DATABASE_HOST,
   username: process.env.DATABASE_USERNAME,
