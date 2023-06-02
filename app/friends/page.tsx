@@ -31,8 +31,6 @@ export default async function Page() {
   return (
     <main className={style.feed}>
       <Scroll users={friends} />
-
-      {userId ? <button>+</button> : null}
     </main>
   );
 }

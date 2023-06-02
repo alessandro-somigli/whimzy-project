@@ -3,10 +3,9 @@ import Image from "next/image"
 import style from "@/styles/components/navbar.module.scss"
 import { SignedOut, UserButton, auth } from "@clerk/nextjs"
 import { SignInButton } from "@clerk/nextjs";
-import Link from "next/link";
+import NavLinks from "./navLinks";
 
 export default function Navbar() {
-  const { userId } = auth();
 
   return (
     <nav className={style.navbar}>
@@ -23,18 +22,14 @@ export default function Navbar() {
       </div>
 
       <div className={style.links}>
-        <Link href={"/feed"}><span className={`${style.hover_effect} ${style.tag}`}>&nbsp;feed</span></Link>
-        <Link href={"/friends"}><span className={`${style.hover_effect} ${style.tag}`}>&nbsp;friends</span></Link>
-        {userId? <Link href={`/users/${userId}`}><span className={`${style.hover_effect} ${style.tag}`}>&nbsp;me</span></Link> : <></>}
+        <NavLinks />
       </div>
 
       <div className={style.dropdown}>
         <input id="textinput" type="checkbox" name="menu" className={style.dropdown_input} />
         <label htmlFor="textinput" className={`${style.tag} ${style.dropdown_label} ${style.hover_effect}`}>&nbsp;Menu</label>
         <div className={style.menu}>
-          <span className={`${style.hover_effect} ${style.tag}`}>&nbsp;feed</span>
-          <span className={`${style.hover_effect} ${style.tag}`}>&nbsp;friends</span>
-          {userId? <span className={`${style.hover_effect} ${style.tag}`}>&nbsp;me</span> : <></>}
+          <NavLinks />
         </div>
       </div>
 

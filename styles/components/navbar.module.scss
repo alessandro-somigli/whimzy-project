@@ -19,6 +19,9 @@
 
 .hover_effect {
   position: relative;
+  margin-right: 1rem;
+  text-decoration: none;
+  color: #FFFFFF;
   
   &::after {
     content: '';
@@ -34,6 +37,24 @@
   }
 
   &:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+  }
+}
+
+.active {
+  &::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: .15rem;
+    bottom: 0;
+    left: 0;
+    background-color: #FEE45A;
+    transform-origin: bottom right;
+    transition: transform 0.25s ease-out;
+
     transform: scaleX(1);
     transform-origin: bottom left;
   }

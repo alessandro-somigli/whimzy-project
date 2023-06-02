@@ -9,12 +9,13 @@
 
   margin-top: .5rem;
 
-  * {
+   > * {
     transition: all .25s ease;
     cursor: pointer;
 
     width: calc(50% + 6rem);
   
     &:hover { transform: translateX(.5rem); }
+    
   }
 }

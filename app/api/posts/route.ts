@@ -34,16 +34,6 @@ export async function POST(request: NextRequest, context: { params: {} }) {
 
   const planetscale = connect(config);
 
-  console.log(`
-  SELECT * FROM (
-    SELECT DISTINCT * FROM Posts WHERE 
-    ${dateFilter} ${usersFilter} ${postsFilter}
-    ORDER BY RAND() LIMIT 20
-  ) AS Posts
-  LEFT JOIN Contributions ON Posts.post_id = Contributions.cont_post
-  ORDER BY Posts.post_publish_date, Contributions.cont_publish_date;  
-  `)
-
   // select 20 new posts and all its contributions
   const posts = (await planetscale.execute(`
   SELECT * FROM (
