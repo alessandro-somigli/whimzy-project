@@ -4,8 +4,6 @@ import { auth } from "@clerk/nextjs";
 import { getFollowedResponse } from "../api/followed/route";
 import { connect } from "@planetscale/database";
 
-export const runtime = "edge";
-
 const config = {
   host: process.env.DATABASE_HOST,
   username: process.env.DATABASE_USERNAME,
