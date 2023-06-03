@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getPostsResponse } from "@/app/api/posts/route";
 import { contributionRow } from "@/database/schema";
 import { post } from "@/database/schema";
+import { clerkClient } from "@clerk/nextjs";
 
 export const runtime = "edge";
 
@@ -12,7 +13,9 @@ const config = {
   password: process.env.DATABASE_PASSWORD
 }
 
-const parseResponse = (response: getPostsResponse): post => {
+const parseResponse = async (response: getPostsResponse): Promise<post> => {
+  const user = await clerkClient.users.getUser(response[0].post_user);
+
   const post = {
     post_title: response[0].post_title,
     post_text: response[0].post_text,
@@ -20,6 +23,8 @@ const parseResponse = (response: getPostsResponse): post => {
     post_id: response[0].post_id,
     post_user: response[0].post_user,
     contributions: [] as contributionRow[],
+    user_image: user?.profileImageUrl, 
+    username: `${user?.firstName} ${user?.lastName}`,
   }
   
   response.forEach(row => {
@@ -44,6 +49,6 @@ export async function GET(request: NextRequest, context: { params: { id: number 
   `)).rows as getPostsResponse;
 
   return response.length? 
-    NextResponse.json(parseResponse(response)) : 
+    NextResponse.json(await parseResponse(response)) : 
     NextResponse.json({ error: "NO_POST_ID" });
 }

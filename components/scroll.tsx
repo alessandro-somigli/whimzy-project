@@ -35,6 +35,8 @@ const parseResponse = (response: getPostsResponse): Array<post> => {
         post_id: row.post_id,
         post_user: row.post_user,
         contributions: [contribution],
+        user_image: row.user_image,
+        username: row.username
     });
   });
 
@@ -62,7 +64,8 @@ export default function Scroll(props: ScrollProps) {
       setLoading(false);
 
       if (posts.length) setPosts(prev => [...prev, ...posts]);
-      else setEmpty(true);
+        else setEmpty(true);
+      
     });
   }
 

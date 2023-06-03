@@ -1,6 +1,7 @@
 import { contributionRow, postRow } from "@/database/schema";
 import { connect } from "@planetscale/database";
 import { NextRequest, NextResponse } from "next/server";
+import { clerkClient } from "@clerk/nextjs";
 
 export const runtime = "edge";
 
@@ -10,7 +11,7 @@ const config = {
   password: process.env.DATABASE_PASSWORD
 }
 
-export type getPostsRow = postRow & contributionRow
+export type getPostsRow = postRow & contributionRow & { username: string, user_image: string }
 export type getPostsResponse = Array<getPostsRow>
 
 export async function POST(request: NextRequest, context: { params: {} }) {
@@ -45,5 +46,17 @@ export async function POST(request: NextRequest, context: { params: {} }) {
   ORDER BY Posts.post_publish_date, Contributions.cont_publish_date;  
   `)).rows as getPostsResponse;
 
-  return NextResponse.json(posts);
+  const user_ids = posts.map(post => post.post_user);
+  const users_data = await clerkClient.users.getUserList({ userId: user_ids, limit: 20 });
+
+  const response = posts.map((post) => { 
+    const user = users_data.find(user => post.post_user === user.id);
+
+    return { 
+      ...post, 
+      user_image: user?.profileImageUrl, 
+      username: `${user?.firstName} ${user?.lastName}` }
+  })
+
+  return NextResponse.json(response);
 }
