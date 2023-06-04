@@ -56,3 +56,8 @@ export async function GET(request: NextRequest, context: { params: { id: number 
     NextResponse.json(await parseResponse(response)) : 
     NextResponse.json({ error: "NO_POST_ID" });
 }
+
+export async function POST(request: NextRequest, context: { params: { id: number } } ) {
+
+  return NextResponse.json({ msg: "hello world!" })
+}

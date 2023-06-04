@@ -5,6 +5,7 @@ import useSWR from "swr";
 import { post } from "@/database/schema";
 import { useUser } from "@clerk/nextjs";
 import Spinner from "@/components/spinner";
+import { ChangeEvent, useState } from "react";
 
 type ReactivePostProps = {
   postId: number
@@ -12,6 +13,9 @@ type ReactivePostProps = {
 
 export default function RectivePost(props: ReactivePostProps) {
   const { user } = useUser();
+  const [contribution, setContribution] = useState("");
+
+  const maxChars = 50;
 
   const { data, error, isLoading } = useSWR(
     `/api/posts/${props.postId}`, 
@@ -20,7 +24,18 @@ export default function RectivePost(props: ReactivePostProps) {
 
   const post = data as post;
 
-  const onSendContribution = () => {}
+  const onSendContribution = async () => {
+    const response = await fetch(`/api/posts/${props.postId}`, {
+      body: JSON.stringify({ contribution }),
+      method: 'POST'
+    });
+
+    const json = await response.json();
+  }
+
+  const handleInputChange = (evt: ChangeEvent<HTMLInputElement>) => {
+    evt.target.value.length <= maxChars? setContribution(evt.target.value) : null
+  }
 
   return (
     <>
@@ -31,9 +46,10 @@ export default function RectivePost(props: ReactivePostProps) {
           {post.contributions?.find(row => row.cont_user === user?.id) || post.post_user === user?.id? 
             <></> : 
             <div>
-              <button onClick={() => onSendContribution}>post</button>
-              <input type="text" />
+              <button onClick={() => onSendContribution()}>post</button>
+              <input type="text" value={contribution} onChange={(evt) => handleInputChange(evt)} />
             </div>}
+            <span>characters left: {maxChars - contribution.length}</span>
         </div> }
     </>
   );  
