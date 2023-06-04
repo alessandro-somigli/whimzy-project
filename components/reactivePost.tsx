@@ -20,16 +20,18 @@ export default function RectivePost(props: ReactivePostProps) {
 
   const post = data as post;
 
+  const onSendContribution = () => {}
+
   return (
     <>
       { isLoading? <Spinner /> : 
         error? <div>error: {JSON.stringify(error)}</div> :
         <div>
           <Post post={post} />
-          {post.contributions?.find(row => row.cont_user === user?.id)? 
+          {post.contributions?.find(row => row.cont_user === user?.id) || post.post_user === user?.id? 
             <></> : 
             <div>
-              <button>post</button>
+              <button onClick={() => onSendContribution}>post</button>
               <input type="text" />
             </div>}
         </div> }

@@ -14,7 +14,11 @@ const config = {
 }
 
 const parseResponse = async (response: getPostsResponse): Promise<post> => {
-  const user = await clerkClient.users.getUser(response[0].post_user);
+  console.log(response[0].post_user);
+  let user = undefined
+  try {
+    user = await clerkClient.users.getUser(response[0].post_user);
+  } catch {}
 
   const post = {
     post_title: response[0].post_title,

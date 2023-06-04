@@ -18,7 +18,7 @@ export default function NavLinks() {
         ${path.includes("/friends")?style.active:null}`}
         >&nbsp;friends</Link>) : (<></>)}
       {user ? (<Link href={`/users/${user.id}`} className={`${style.hover_effect} ${style.tag}
-        ${path.includes("/users")?style.active:null}`}
+        ${path.includes(`/users/${user.id}`)?style.active:null}`}
         >&nbsp;me</Link>) : (<></>)}
     </>
   );

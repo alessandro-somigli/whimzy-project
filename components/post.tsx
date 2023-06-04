@@ -10,7 +10,9 @@ export default function ScrollPost(props: PostProps) {
 
   return (
     <div className={style.post}>
-      <Image src={props.post.user_image} alt="img" width={64} height={64}/>
+      {props.post.user_image? 
+        <Image src={props.post.user_image} alt="img" width={64} height={64}/> : 
+        <Image src={"/images/default-user-image.png"} alt="img" width={64} height={64} /> }
       <span className={style.author}>@{props.post.username}</span> <br />
       <span className={style.title}>{props.post.post_title}</span> <br />
 

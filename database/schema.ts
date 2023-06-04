@@ -22,6 +22,6 @@ type followRow = {
 
 export type { postRow, contributionRow, followRow }
 
-type post = postRow & { contributions: Array<contributionRow> } & { username: string, user_image: string };
+type post = postRow & { contributions: Array<contributionRow> } & { username: string, user_image: string | undefined };
 
 export type { post }
