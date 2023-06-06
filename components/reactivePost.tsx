@@ -15,9 +15,9 @@ export default function RectivePost(props: ReactivePostProps) {
   const { user } = useUser();
   const [contribution, setContribution] = useState("");
 
-  const maxChars = 50;
+  const maxChars = 40;
 
-  const { data, error, isLoading } = useSWR(
+  const { data, error, isLoading, mutate } = useSWR(
     `/api/posts/${props.postId}`, 
     async (...args) => fetch(...args).then(res => res.json()), 
     { refreshInterval: 20000 });
@@ -25,12 +25,12 @@ export default function RectivePost(props: ReactivePostProps) {
   const post = data as post;
 
   const onSendContribution = async () => {
-    const response = await fetch(`/api/posts/${props.postId}`, {
+    await fetch(`/api/posts/${props.postId}`, {
       body: JSON.stringify({ contribution }),
       method: 'POST'
     });
 
-    const json = await response.json();
+    mutate(data)
   }
 
   const handleInputChange = (evt: ChangeEvent<HTMLInputElement>) => {
@@ -43,13 +43,15 @@ export default function RectivePost(props: ReactivePostProps) {
         error? <div>error: {JSON.stringify(error)}</div> :
         <div>
           <Post post={post} />
-          {post.contributions?.find(row => row.cont_user === user?.id) || post.post_user === user?.id? 
+          { post.contributions?.find(row => row.cont_user === user?.id) || post.post_user === user?.id? 
             <></> : 
-            <div>
-              <button onClick={() => onSendContribution()}>post</button>
-              <input type="text" value={contribution} onChange={(evt) => handleInputChange(evt)} />
-            </div>}
-            <span>characters left: {maxChars - contribution.length}</span>
+            <>  
+              <div>
+                <button onClick={() => onSendContribution()}>contribute</button>
+                <input type="text" value={contribution} onChange={(evt) => handleInputChange(evt)} />
+              </div>
+              <span>characters left: {maxChars - contribution.length}</span>
+            </> }
         </div> }
     </>
   );  

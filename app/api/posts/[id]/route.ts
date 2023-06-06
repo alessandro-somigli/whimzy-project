@@ -4,6 +4,7 @@ import { getPostsResponse } from "@/app/api/posts/route";
 import { contributionRow } from "@/database/schema";
 import { post } from "@/database/schema";
 import { clerkClient } from "@clerk/nextjs";
+import { getAuth } from "@clerk/nextjs/dist/server/getAuth";
 
 export const runtime = "edge";
 
@@ -49,7 +50,8 @@ export async function GET(request: NextRequest, context: { params: { id: number 
   const response = (await planetscale.execute(`
   SELECT * FROM Posts 
   LEFT JOIN Contributions ON Posts.post_id = Contributions.cont_post
-  WHERE Posts.post_id = ${context.params.id};
+  WHERE Posts.post_id = ${context.params.id}
+  ORDER BY Contributions.cont_publish_date ASC;
   `)).rows as getPostsResponse;
 
   return response.length? 
@@ -58,6 +60,18 @@ export async function GET(request: NextRequest, context: { params: { id: number 
 }
 
 export async function POST(request: NextRequest, context: { params: { id: number } } ) {
+  const contribution = (await request.json()).contribution as string;
+  const { userId } = getAuth(request);
+  const planetscale = connect(config);
+
+  planetscale.execute(`
+  INSERT INTO Contributions (cont_post, cont_user, cont_text, cont_publish_date) VALUES (
+    ${context.params.id},
+    '${userId}',
+    '${contribution}',
+    NOW()
+  );
+  `)
 
   return NextResponse.json({ msg: "hello world!" })
 }

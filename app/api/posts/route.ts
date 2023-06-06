@@ -43,7 +43,7 @@ export async function POST(request: NextRequest, context: { params: {} }) {
     ORDER BY RAND() LIMIT 20
   ) AS Posts
   LEFT JOIN Contributions ON Posts.post_id = Contributions.cont_post
-  ORDER BY Posts.post_publish_date, Contributions.cont_publish_date;  
+  ORDER BY Posts.post_publish_date, Contributions.cont_publish_date DESC;  
   `)).rows as getPostsResponse;
 
   const user_ids = posts.map(post => post.post_user);
